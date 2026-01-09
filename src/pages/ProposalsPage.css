@@ -1,0 +1,239 @@
+.proposals-page {
+  background: white;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-title {
+  margin-top: 0;
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 32px;
+}
+
+/* 标签页样式 */
+.proposals-tabs {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #e0e0e0;
+  padding-bottom: 0;
+}
+
+.tab-button {
+  padding: 15px 25px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+  position: relative;
+  bottom: -2px;
+  border-radius: 8px 8px 0 0;
+}
+
+.tab-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.tab-button.active {
+  border-bottom-color: currentColor;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.tab-icon {
+  font-size: 20px;
+}
+
+.tab-label {
+  font-size: 16px;
+}
+
+.tab-count {
+  font-size: 14px;
+  opacity: 0.8;
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.tab-button.active .tab-count {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.proposals-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.no-proposals {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 18px;
+}
+
+.no-proposals-in-tab {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+  font-size: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #e0e0e0;
+}
+
+.proposal-card {
+  border: 2px solid #61dafb;
+  padding: 25px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.proposal-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.proposal-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: bold;
+  color: #333333;
+  flex: 1;
+}
+
+.status-badge {
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  white-space: nowrap;
+  margin-left: 15px;
+}
+
+.proposal-time-info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #61dafb;
+}
+
+.time-item {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+}
+
+.time-label {
+  font-weight: 600;
+  color: #666666;
+  min-width: 80px;
+}
+
+.time-value {
+  color: #333333;
+  font-family: 'Courier New', monospace;
+}
+
+.options-section {
+  margin: 20px 0;
+}
+
+.options-title {
+  margin: 0 0 15px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 15px 0;
+}
+
+.vote-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s;
+  border: 2px solid;
+  color: #282c34;
+}
+
+.vote-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(97, 218, 251, 0.4);
+}
+
+.vote-btn:disabled {
+  background-color: #e0e0e0 !important;
+  border-color: #bdbdbd !important;
+  color: #757575;
+}
+
+.option-name {
+  font-weight: 600;
+  margin-bottom: 5px;
+  font-size: 16px;
+}
+
+.option-votes {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.whitelist-notice {
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #fff3cd;
+  border-radius: 8px;
+  color: #856404;
+  text-align: center;
+  font-size: 14px;
+  border: 2px solid #ffc107;
+}
+
+.proposal-divider {
+  height: 2px;
+  background: linear-gradient(to right, transparent, #61dafb, transparent);
+  margin: 30px 0 20px 0;
+  border-radius: 1px;
+}
+
+.chart-container {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
