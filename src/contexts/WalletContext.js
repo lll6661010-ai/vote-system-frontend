@@ -5,19 +5,22 @@ import VoteSystemABI from '../contracts/VoteSystem.json';
 // 合约地址和网络配置
 // 根据环境变量或当前网络自动选择合约地址
 const getContractAddress = (chainId) => {
-  // 从环境变量读取，如果没有则使用默认值
+  // 从环境变量读取
   const sepoliaAddress = process.env.REACT_APP_SEPOLIA_CONTRACT_ADDRESS;
   const localAddress = process.env.REACT_APP_LOCAL_CONTRACT_ADDRESS || "0x9468e7fA82D4e4e4fd39f980645E5eE623ef2868";
   
-  // Sepolia 测试网
-  if (chainId === 11155111 && sepoliaAddress) {
+  // Sepolia 测试网 - 必须配置环境变量
+  if (chainId === 11155111) {
+    if (!sepoliaAddress || sepoliaAddress.trim() === '') {
+      return null; // 返回 null 表示未配置
+    }
     return sepoliaAddress;
   }
   // 本地开发网络
   if (chainId === 1337) {
     return localAddress;
   }
-  // 默认返回本地地址
+  // 默认返回本地地址（用于未知网络）
   return localAddress;
 };
 
@@ -89,6 +92,13 @@ export const WalletProvider = ({ children }) => {
       
       // 根据链ID获取合约地址
       const contractAddress = getContractAddress(Number(chainId));
+      
+      // 检查 Sepolia 网络是否配置了合约地址
+      if (!contractAddress) {
+        alert('Sepolia 测试网合约地址未配置！\n\n请在 Vercel 项目设置中配置环境变量：\nREACT_APP_SEPOLIA_CONTRACT_ADDRESS=您的合约地址\n\n配置后需要重新部署项目。');
+        return;
+      }
+      
       const tempContract = new ethers.Contract(contractAddress, VoteSystemABI.abi, tempSigner);
 
       setProvider(tempProvider);
@@ -101,7 +111,7 @@ export const WalletProvider = ({ children }) => {
         await tempContract.proposalCount();
       } catch (error) {
         console.error("合约验证失败：", error);
-        alert('合约地址无效或合约未部署！');
+        alert(`合约地址无效或合约未部署！\n\n合约地址：${contractAddress}\n网络：${getChainName(Number(chainId))}\n\n请检查：\n1. 合约是否已部署到当前网络\n2. 合约地址是否正确\n3. MetaMask 是否连接到正确的网络`);
         return;
       }
 
