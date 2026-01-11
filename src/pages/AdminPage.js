@@ -12,6 +12,8 @@ function AdminPage() {
   const [voterAddrInput, setVoterAddrInput] = useState("");
   const [propTitleInput, setPropTitleInput] = useState("");
   const [propOptionsInput, setPropOptionsInput] = useState("");
+  const [startTimeInput, setStartTimeInput] = useState("");
+  const [endTimeInput, setEndTimeInput] = useState("");
   const [addVoterLoading, setAddVoterLoading] = useState(false);
   const [createLoading, setCreateLoading] = useState(false);
   const [registerApplications, setRegisterApplications] = useState([]);
@@ -89,6 +91,12 @@ function AdminPage() {
       return;
     }
 
+    // 验证时间输入
+    if (!startTimeInput || !endTimeInput) {
+      alert("请设置开始时间和结束时间");
+      return;
+    }
+
     try {
       setCreateLoading(true);
       const optionsArr = optionsStr.replace(/，/g, ",").split(",").map(opt => opt.trim()).filter(opt => opt);
@@ -99,17 +107,35 @@ function AdminPage() {
         return;
       }
 
+      // 将日期时间字符串转换为 Unix 时间戳
+      const startTimestamp = Math.floor(new Date(startTimeInput).getTime() / 1000);
+      const endTimestamp = Math.floor(new Date(endTimeInput).getTime() / 1000);
+
+      // 获取当前区块时间
       const currentBlock = await provider.getBlock("latest");
       const currentTimestamp = currentBlock.timestamp;
-      const startTime = currentTimestamp + 60;
-      const endTime = startTime + 3600;
 
-      const tx = await contract.createVotingProposal(title, optionsArr, startTime, endTime);
+      // 验证时间
+      if (startTimestamp < currentTimestamp) {
+        alert("开始时间不能早于当前时间");
+        setCreateLoading(false);
+        return;
+      }
+
+      if (startTimestamp >= endTimestamp) {
+        alert("开始时间必须早于结束时间");
+        setCreateLoading(false);
+        return;
+      }
+
+      const tx = await contract.createVotingProposal(title, optionsArr, startTimestamp, endTimestamp);
       await tx.wait();
 
       alert(t('messages.proposalCreated'));
       setPropTitleInput("");
       setPropOptionsInput("");
+      setStartTimeInput("");
+      setEndTimeInput("");
     } catch (error) {
       console.error("创建提案失败:", error);
       alert(t('messages.createFailed') + ": " + (error.message || error.toString()).slice(0, 150));
@@ -183,6 +209,32 @@ function AdminPage() {
             onChange={(e) => setPropOptionsInput(e.target.value)}
             className="admin-input"
           />
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1', minWidth: '200px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
+                {t('app.startTime')}
+              </label>
+              <input
+                type="datetime-local"
+                value={startTimeInput}
+                onChange={(e) => setStartTimeInput(e.target.value)}
+                className="admin-input"
+                style={{ width: '100%' }}
+              />
+            </div>
+            <div style={{ flex: '1', minWidth: '200px' }}>
+              <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
+                {t('app.endTime')}
+              </label>
+              <input
+                type="datetime-local"
+                value={endTimeInput}
+                onChange={(e) => setEndTimeInput(e.target.value)}
+                className="admin-input"
+                style={{ width: '100%' }}
+              />
+            </div>
+          </div>
           <button
             onClick={createProposal}
             disabled={createLoading}
